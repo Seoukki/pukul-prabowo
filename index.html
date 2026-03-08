@@ -20,7 +20,7 @@
         }
         
         body {
-            background: linear-gradient(180deg, #0f0f23 0%, #1a0a2e 20%, #2d1655 50%, #1e3a8a 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             height: 100vh;
             overflow: hidden;
@@ -28,71 +28,47 @@
             width: 100%;
         }
         
-        /* Animated Background */
         .bg-animated {
             position: fixed;
             inset: 0;
             background: 
-                radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(147, 51, 234, 0.05) 0%, transparent 70%);
-            animation: bgPulse 8s ease-in-out infinite;
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: bgMove 10s ease-in-out infinite;
             pointer-events: none;
         }
         
-        @keyframes bgPulse {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
         }
         
-        .stars {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                radial-gradient(2px 2px at 30px 40px, rgba(255,255,255,0.4), transparent),
-                radial-gradient(2px 2px at 70px 90px, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 120px 60px, rgba(255,255,255,0.2), transparent),
-                radial-gradient(2px 2px at 180px 140px, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 250px 100px, rgba(255,255,255,0.2), transparent),
-                radial-gradient(2px 2px at 320px 180px, rgba(255,255,255,0.3), transparent);
-            background-size: 350px 250px;
-            animation: twinkle 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-        
-        /* Glass Effects */
         .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
         .glass-strong {
-            background: rgba(20, 20, 40, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        /* Marquee */
         .marquee-container {
             overflow: hidden;
             white-space: nowrap;
             position: relative;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
         
         .marquee-content {
             display: inline-flex;
-            animation: marquee 30s linear infinite;
+            animation: marquee 25s linear infinite;
         }
         
         @keyframes marquee {
@@ -100,11 +76,10 @@
             100% { transform: translateX(-50%); }
         }
         
-        /* Target - Gepeng Effect */
         .target-wrapper {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             cursor: pointer;
             transition: transform 0.1s;
         }
@@ -118,133 +93,88 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.15);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             box-shadow: 
-                0 0 40px rgba(139, 92, 246, 0.4),
-                0 0 80px rgba(59, 130, 246, 0.2),
-                inset 0 0 60px rgba(0,0,0,0.4);
+                0 0 40px rgba(255, 255, 255, 0.3),
+                0 0 80px rgba(255, 255, 255, 0.1);
             transition: all 0.1s;
         }
         
         .target-wrapper:active .target-img {
             transform: scaleY(0.9) scaleX(1.1);
-            box-shadow: 
-                0 0 20px rgba(139, 92, 246, 0.6),
-                0 0 40px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
         
-        /* Big Hammer */
         .hammer {
             position: fixed;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             pointer-events: none;
             z-index: 9999;
             display: none;
-            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
         }
         
         .hammer.active {
             display: block;
-            animation: hammerBig 0.2s ease-out;
+            animation: hammerAnim 0.2s ease-out;
         }
         
-        @keyframes hammerBig {
+        @keyframes hammerAnim {
             0% { transform: rotate(-60deg) scale(0.7) translateY(50px); }
-            30% { transform: rotate(-20deg) scale(1.2) translateY(-20px); }
-            60% { transform: rotate(10deg) scale(1.1) translateY(-10px); }
-            100% { transform: rotate(0deg) scale(1) translateY(0); }
+            50% { transform: rotate(-10deg) scale(1.2); }
+            100% { transform: rotate(0deg) scale(1); }
         }
         
-        /* Score Popup */
         .score-pop {
             position: absolute;
-            color: #fbbf24;
+            color: #FFD700;
             font-weight: 900;
-            font-size: 36px;
+            font-size: 32px;
             pointer-events: none;
-            animation: scoreUp 1s ease-out forwards;
-            text-shadow: 0 0 30px rgba(251, 191, 36, 1), 0 0 60px rgba(251, 191, 36, 0.5);
+            animation: scoreUp 0.8s ease-out forwards;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 1);
             z-index: 100;
         }
         
         @keyframes scoreUp {
-            0% { transform: translateY(0) scale(0.3) rotate(-10deg); opacity: 0; }
-            20% { transform: translateY(-30px) scale(1.3) rotate(5deg); opacity: 1; }
-            100% { transform: translateY(-100px) scale(0.9) rotate(0deg); opacity: 0; }
-        }
-        
-        /* Ripple */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            border: 3px solid rgba(139, 92, 246, 0.8);
-            animation: rippleOut 0.6s ease-out;
-            pointer-events: none;
-        }
-        
-        @keyframes rippleOut {
-            0% { width: 0; height: 0; opacity: 1; }
-            100% { width: 300px; height: 300px; opacity: 0; }
-        }
-        
-        /* Glow */
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.3); }
-            50% { box-shadow: 0 0 60px rgba(139, 92, 246, 0.6), 0 0 100px rgba(59, 130, 246, 0.3); }
-        }
-        
-        .glow-anim {
-            animation: glowPulse 3s ease-in-out infinite;
+            0% { transform: translateY(0) scale(0.3); opacity: 0; }
+            20% { transform: translateY(-30px) scale(1.3); opacity: 1; }
+            100% { transform: translateY(-80px) scale(1); opacity: 0; }
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
         }
         
         .float-anim {
-            animation: float 4s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
         }
         
-        /* Buttons */
         .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
         
         .btn-primary:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.6);
+            transform: scale(0.95);
         }
         
-        .btn-secondary {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: #fbbf24;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-        
-        .btn-secondary:active {
-            background: rgba(251, 191, 36, 0.2);
-            transform: scale(0.96);
-        }
-        
-        /* Side Icons */
         .side-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.15s;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            transition: all 0.2s;
         }
         
         .side-btn:active {
-            transform: scale(0.88);
-            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.3);
         }
         
-        /* Skew */
         .skew-item {
             transform: skewX(-8deg);
         }
@@ -253,19 +183,18 @@
             transform: skewX(8deg);
         }
         
-        /* Support Popup */
         .support-popup {
             position: fixed;
-            bottom: 80px;
+            bottom: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            transform: translateX(-50%) translateY(200px);
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             border-radius: 16px;
-            padding: 12px 24px;
+            padding: 12px 20px;
             opacity: 0;
             transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 40;
-            box-shadow: 0 10px 40px rgba(245, 158, 11, 0.4);
+            z-index: 50;
+            box-shadow: 0 10px 40px rgba(245, 87, 108, 0.4);
         }
         
         .support-popup.show {
@@ -273,51 +202,31 @@
             transform: translateX(-50%) translateY(0);
         }
         
-        /* Modal */
-        .modal-enter {
-            animation: modalPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.8) translateY(50px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        
-        /* Confetti */
-        .confetti {
+        .toast {
             position: fixed;
-            width: 12px;
-            height: 12px;
-            pointer-events: none;
-            animation: confettiFall 3s ease-out forwards;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #764ba2;
+            border-radius: 50px;
+            padding: 12px 24px;
+            opacity: 0;
+            transition: all 0.4s;
+            z-index: 100;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         
-        @keyframes confettiFall {
-            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(1080deg); opacity: 0; }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
         
-        /* Certificate */
-        .cert-frame {
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
-            border: 4px solid #fbbf24;
-            box-shadow: 0 0 60px rgba(251, 191, 36, 0.3), inset 0 0 60px rgba(0,0,0,0.3);
-            position: relative;
-        }
-        
-        .cert-frame::before {
-            content: '';
-            position: absolute;
-            inset: 12px;
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            pointer-events: none;
-        }
-        
-        /* Name Input Page */
         .name-page {
             position: fixed;
             inset: 0;
-            background: linear-gradient(180deg, #0f0f23 0%, #1a0a2e 50%, #2d1655 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -326,101 +235,56 @@
             padding: 20px;
         }
         
-        .name-input {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(139, 92, 246, 0.3);
+        .input-field {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
             border-radius: 16px;
-            padding: 16px 24px;
+            padding: 14px 20px;
             color: white;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
             text-align: center;
             outline: none;
             transition: all 0.3s;
+            margin-bottom: 12px;
         }
         
-        .name-input:focus {
-            border-color: rgba(139, 92, 246, 0.8);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        .input-field:focus {
+            border-color: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.3);
         }
         
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: rgba(20, 20, 40, 0.95);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            border-radius: 50px;
-            padding: 12px 24px;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 100;
-            backdrop-filter: blur(10px);
+        .input-field::placeholder {
+            color: rgba(255,255,255,0.6);
         }
         
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
+        select.input-field {
+            appearance: none;
+            cursor: pointer;
         }
         
-        /* No scroll */
         .no-scroll { overflow: hidden; }
         
-        /* HP Bar Battle */
-        .hp-container {
-            background: rgba(0,0,0,0.4);
-            border-radius: 20px;
-            padding: 4px;
-            height: 20px;
-        }
-        
-        .hp-bar {
-            height: 100%;
-            border-radius: 16px;
-            transition: width 0.2s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hp-bar::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: hpShine 2s infinite;
-        }
-        
-        @keyframes hpShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        /* Damage number */
-        .damage-num {
-            position: absolute;
-            font-weight: 900;
-            font-size: 28px;
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
             pointer-events: none;
-            animation: damageFloat 0.8s ease-out forwards;
-            text-shadow: 0 0 20px currentColor;
+            animation: confettiFall 3s ease-out forwards;
         }
         
-        @keyframes damageFloat {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { transform: translateY(-20px) scale(1.3); opacity: 1; }
-            100% { transform: translateY(-60px) scale(1); opacity: 0; }
+        @keyframes confettiFall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
 <body class="text-white no-scroll">
     <div class="bg-animated"></div>
-    <div class="stars"></div>
     
-    <!-- Big Hammer -->
+    <!-- Hammer -->
     <div id="hammer" class="hammer">
         <svg viewBox="0 0 100 100" fill="none">
             <rect x="47" y="25" width="6" height="60" fill="#5D4037" rx="3"/>
@@ -428,17 +292,58 @@
             <rect x="20" y="18" width="8" height="19" fill="#B8860B" rx="2"/>
             <rect x="72" y="18" width="8" height="19" fill="#B8860B" rx="2"/>
             <circle cx="50" cy="8" r="12" fill="#DC2626"/>
-            <rect x="35" y="20" width="30" height="3" fill="#B8860B" rx="1"/>
         </svg>
     </div>
 
-    <!-- Name Input Page -->
+    <!-- Name & Province Input Page -->
     <div id="name-page" class="name-page">
         <div class="text-6xl mb-4">🥊</div>
-        <h1 class="text-3xl font-black mb-2 text-center bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">PUKUL BAHLIL</h1>
-        <p class="text-gray-400 mb-8 text-sm">Masukkan nama untuk memulai</p>
-        <input type="text" id="name-input" class="name-input mb-6" placeholder="Nama kamu" maxlength="15">
-        <button onclick="saveName()" class="btn-primary px-8 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-purple-500/40 active:scale-95 transition-transform">
+        <h1 class="text-3xl font-black mb-6 text-center text-white">PUKUL BAHLIL</h1>
+        
+        <input type="text" id="name-input" class="input-field" placeholder="Masukkan nama kamu" maxlength="15">
+        
+        <select id="province-input" class="input-field">
+            <option value="" disabled selected>Pilih Provinsi</option>
+            <option value="Aceh">Aceh</option>
+            <option value="Bali">Bali</option>
+            <option value="Banten">Banten</option>
+            <option value="Bengkulu">Bengkulu</option>
+            <option value="DI Yogyakarta">DI Yogyakarta</option>
+            <option value="DKI Jakarta">DKI Jakarta</option>
+            <option value="Gorontalo">Gorontalo</option>
+            <option value="Jambi">Jambi</option>
+            <option value="Jawa Barat">Jawa Barat</option>
+            <option value="Jawa Tengah">Jawa Tengah</option>
+            <option value="Jawa Timur">Jawa Timur</option>
+            <option value="Kalimantan Barat">Kalimantan Barat</option>
+            <option value="Kalimantan Selatan">Kalimantan Selatan</option>
+            <option value="Kalimantan Tengah">Kalimantan Tengah</option>
+            <option value="Kalimantan Timur">Kalimantan Timur</option>
+            <option value="Kalimantan Utara">Kalimantan Utara</option>
+            <option value="Kepulauan Bangka Belitung">Kepulauan Bangka Belitung</option>
+            <option value="Kepulauan Riau">Kepulauan Riau</option>
+            <option value="Lampung">Lampung</option>
+            <option value="Maluku">Maluku</option>
+            <option value="Maluku Utara">Maluku Utara</option>
+            <option value="Nusa Tenggara Barat">Nusa Tenggara Barat</option>
+            <option value="Nusa Tenggara Timur">Nusa Tenggara Timur</option>
+            <option value="Papua">Papua</option>
+            <option value="Papua Barat">Papua Barat</option>
+            <option value="Papua Barat Daya">Papua Barat Daya</option>
+            <option value="Papua Pegunungan">Papua Pegunungan</option>
+            <option value="Papua Selatan">Papua Selatan</option>
+            <option value="Riau">Riau</option>
+            <option value="Sulawesi Barat">Sulawesi Barat</option>
+            <option value="Sulawesi Selatan">Sulawesi Selatan</option>
+            <option value="Sulawesi Tengah">Sulawesi Tengah</option>
+            <option value="Sulawesi Tenggara">Sulawesi Tenggara</option>
+            <option value="Sulawesi Utara">Sulawesi Utara</option>
+            <option value="Sumatera Barat">Sumatera Barat</option>
+            <option value="Sumatera Selatan">Sumatera Selatan</option>
+            <option value="Sumatera Utara">Sumatera Utara</option>
+        </select>
+        
+        <button onclick="saveUserData()" class="btn-primary px-8 py-4 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-transform mt-4">
             MULAI MAIN
         </button>
     </div>
@@ -449,440 +354,271 @@
         <!-- Header -->
         <div class="glass rounded-2xl p-3 mb-2 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <span class="text-xl">🌍</span>
+                <span class="text-lg">🌍</span>
                 <div>
-                    <p class="text-[9px] text-gray-400 uppercase tracking-wider">Total Pukulan</p>
-                    <p id="global-score" class="font-bold text-sm text-yellow-400">×0</p>
+                    <p class="text-[9px] text-white/70 uppercase tracking-wider">Total Pukulan</p>
+                    <p id="global-score" class="font-bold text-sm text-yellow-300">×0</p>
                 </div>
             </div>
             <div class="text-right">
-                <p class="text-[9px] text-gray-400 uppercase tracking-wider">Provinsi</p>
-                <p id="user-province" class="font-bold text-xs text-purple-300">DKI Jakarta</p>
+                <p class="text-[9px] text-white/70 uppercase tracking-wider">Provinsi</p>
+                <p id="user-province" class="font-bold text-xs text-white">-</p>
             </div>
         </div>
 
-        <!-- Leaderboard Provinsi -->
+        <!-- Compact Leaderboard -->
         <div class="mb-2">
-            <h3 class="text-center font-bold text-[10px] mb-1 text-gray-300 uppercase tracking-wider">
-                <i class="fas fa-trophy text-yellow-500 mr-1"></i> Leaderboard Pukulan
+            <h3 class="text-center font-bold text-[10px] mb-1 text-white/80 uppercase tracking-wider">
+                <i class="fas fa-trophy text-yellow-300 mr-1"></i> Leaderboard
             </h3>
-            <div class="marquee-container glass rounded-lg py-2">
-                <div class="marquee-content" id="prov-marquee"></div>
+            <div class="marquee-container glass rounded-lg py-1.5">
+                <div class="marquee-content" id="leaderboard-marquee"></div>
             </div>
         </div>
 
-        <!-- Top Versus Winners - More Items -->
-        <div class="glass rounded-xl p-2 mb-2">
-            <h4 class="text-center font-bold text-[9px] mb-1 text-gray-300 uppercase">
-                <i class="fas fa-bolt text-yellow-400 mr-1"></i> Top Versus Winners
+        <!-- Compact Top Winners -->
+        <div class="glass rounded-xl p-1.5 mb-2">
+            <h4 class="text-center font-bold text-[8px] mb-1 text-white/80 uppercase">
+                <i class="fas fa-bolt text-yellow-300 mr-1"></i> Top Winners
             </h4>
             <div class="marquee-container">
                 <div class="marquee-content" id="winners-marquee" style="animation-duration: 20s;"></div>
             </div>
         </div>
 
-        <!-- Top Supporter -->
-        <div class="glass rounded-xl p-2 mb-2">
-            <div class="flex items-center justify-center gap-1 mb-1">
-                <i class="fas fa-gem text-blue-400 text-[10px]"></i>
-                <h4 class="text-center font-bold text-[9px] text-gray-300 uppercase">Top Supporter Saweria</h4>
-            </div>
-            <p class="text-center text-[8px] text-gray-500 mb-1">(100% DANA AKAN DI DONASIKAN KE PANTI ASUHAN)</p>
+        <!-- Compact Donors -->
+        <div class="glass rounded-xl p-1.5 mb-2">
+            <h4 class="text-center font-bold text-[8px] mb-1 text-white/80 uppercase">
+                <i class="fas fa-gem text-pink-300 mr-1"></i> Top Supporter
+            </h4>
             <div class="marquee-container">
-                <div class="marquee-content" id="donation-marquee" style="animation-duration: 25s;"></div>
+                <div class="marquee-content" id="donation-marquee" style="animation-duration: 22s;"></div>
             </div>
         </div>
 
         <!-- Game Area -->
         <div class="flex-1 flex flex-col items-center justify-center relative">
             
-            <!-- Target with Gepeng Effect -->
-            <div class="target-wrapper float-anim glow-anim mb-4" id="game-target">
-                <div class="absolute inset-0 bg-purple-500 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+            <div class="target-wrapper float-anim mb-4" id="game-target">
+                <div class="absolute inset-0 bg-white rounded-full blur-3xl opacity-20 animate-pulse"></div>
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
                      class="target-img relative z-10" 
-                     alt="Target"
-                     id="target-img">
+                     alt="Target">
             </div>
 
-            <!-- Score -->
             <div class="text-center mb-4">
-                <p class="text-gray-400 text-[10px] uppercase tracking-widest mb-1">Total Pukulan Saya</p>
+                <p class="text-white/70 text-[10px] uppercase tracking-widest mb-1">Total Pukulan Saya</p>
                 <div class="flex items-center justify-center gap-2">
-                    <span class="text-2xl filter drop-shadow-lg">🥊</span>
-                    <span id="user-score" class="text-5xl font-black text-yellow-400" style="text-shadow: 0 0 30px rgba(251,191,36,0.6);">0</span>
+                    <span class="text-2xl">🥊</span>
+                    <span id="user-score" class="text-5xl font-black text-yellow-300" style="text-shadow: 0 0 30px rgba(253, 224, 71, 0.5);">0</span>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-2 gap-3 w-full max-w-xs">
-                <button onclick="openVersus()" class="btn-primary rounded-xl py-3 font-bold text-sm flex items-center justify-center gap-2 text-white">
-                    <i class="fas fa-bolt"></i> VERSUS
-                </button>
-                <button onclick="openCertificate()" class="btn-secondary rounded-xl py-3 font-bold text-sm flex items-center justify-center gap-2">
-                    <i class="fas fa-scroll"></i> SERTIFIKAT
-                </button>
-            </div>
+            <!-- Only Main Button -->
+            <button onclick="showSupportPopup()" class="btn-primary rounded-xl py-3 px-6 font-bold text-sm flex items-center justify-center gap-2">
+                <i class="fas fa-heart"></i> DUKUNG KAMI
+            </button>
         </div>
 
-        <!-- Side Menu -->
+        <!-- Side Menu - Simplified -->
         <div class="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-            <button onclick="openProfile()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-blue-300"></i>
+            <button onclick="openProfile()" class="side-btn w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-sm"></i>
             </button>
-            <button onclick="openVersus()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
-                <i class="fas fa-bolt text-yellow-400"></i>
-            </button>
-            <button onclick="openCertificate()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
-                <i class="fas fa-certificate text-yellow-300"></i>
-            </button>
-            <button onclick="toggleSound()" id="sound-btn" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
-                <i class="fas fa-volume-up text-green-400"></i>
+            <button onclick="toggleSound()" id="sound-btn" class="side-btn w-10 h-10 rounded-full flex items-center justify-center">
+                <i class="fas fa-volume-up text-sm"></i>
             </button>
         </div>
-
-        <!-- Support Button -->
-        <button onclick="showSupportPopup()" class="support-banner rounded-full py-3 px-4 w-full mt-2 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-            <p class="font-bold text-xs text-black flex items-center justify-center gap-2 relative z-10">
-                <i class="fas fa-heart text-red-600"></i>
-                Jangan Lupa Support di Saweria YA!!!
-            </p>
-        </button>
     </div>
 
-    <!-- Support Popup (like original) -->
+    <!-- Support Popup -->
     <div id="support-popup" class="support-popup">
         <div class="flex items-center gap-3">
-            <i class="fas fa-heart text-red-600 text-xl animate-pulse"></i>
+            <i class="fas fa-heart text-white text-xl animate-pulse"></i>
             <div>
-                <p class="font-bold text-black text-sm">Dukung di Saweria!</p>
-                <p class="text-black/70 text-xs">100% untuk panti asuhan</p>
+                <p class="font-bold text-white text-sm">Dukung di Saweria!</p>
             </div>
-            <button onclick="openSaweria()" class="bg-black/20 px-3 py-1 rounded-lg text-black font-bold text-xs ml-2 active:scale-95">
+            <button onclick="openSaweria()" class="bg-white/20 px-3 py-1 rounded-lg text-white font-bold text-xs">
                 DONASI
             </button>
         </div>
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="toast">
-        <p id="toast-text" class="text-yellow-400 font-bold text-sm"></p>
-    </div>
+    <div id="toast" class="toast"></div>
 
-    <!-- Modals -->
-    
-    <!-- Versus -->
-    <div id="modal-versus" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-strong rounded-3xl p-6 w-full max-w-sm modal-enter border border-purple-500/30 relative">
-            <button onclick="closeModal('modal-versus')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="text-center mb-6">
-                <div class="text-5xl mb-2 animate-bounce">⚔️</div>
-                <h2 class="text-2xl font-black mb-1 text-white">PILIH MODE</h2>
-                <p class="text-xs text-gray-400">Tantang pemain lain!</p>
+    <!-- Profile Modal -->
+    <div id="modal-profile" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-strong rounded-3xl p-6 w-full max-w-sm text-gray-800">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-black text-gray-800">Profil</h2>
+                <button onclick="closeModal('modal-profile')" class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-600"></i>
+                </button>
             </div>
-            <button onclick="findMatch()" class="w-full btn-primary rounded-xl py-4 mb-3 font-bold text-white active:scale-95 transition-all shadow-lg shadow-purple-500/30">
-                <i class="fas fa-random mr-2"></i> CARI OTOMATIS
-            </button>
-            <button onclick="challengeByName()" class="w-full glass rounded-xl py-4 font-bold border border-white/20 active:scale-95 transition-all text-white">
-                <i class="fas fa-user-friends mr-2"></i> LAWAN TEMAN
-            </button>
-        </div>
-    </div>
-
-    <!-- Profile -->
-    <div id="modal-profile" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-strong rounded-3xl p-6 w-full max-w-sm modal-enter border border-purple-500/30 relative">
-            <button onclick="closeModal('modal-profile')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90">
-                <i class="fas fa-times"></i>
-            </button>
+            
             <div class="text-center">
-                <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl border-2 border-white/20 shadow-lg shadow-purple-500/30">
+                <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-white">
                     <i class="fas fa-user"></i>
                 </div>
-                <h2 id="prof-name" class="text-2xl font-black mb-1 text-white">PLAYER</h2>
-                <p id="prof-province" class="text-purple-300 text-sm mb-4">DKI Jakarta</p>
+                <h2 id="prof-name" class="text-xl font-bold mb-1 text-gray-800">-</h2>
+                <p id="prof-province" class="text-purple-600 text-sm mb-4">-</p>
                 
-                <div class="glass rounded-xl p-4 mb-4 border border-yellow-500/20">
-                    <p class="text-xs text-gray-400 mb-1 uppercase tracking-wider">Total Pukulan</p>
+                <div class="bg-gray-100 rounded-xl p-4 mb-4">
+                    <p class="text-xs text-gray-500 mb-1 uppercase">Total Pukulan</p>
                     <div class="flex items-center justify-center gap-2">
                         <span class="text-2xl">🥊</span>
-                        <span id="prof-score" class="text-3xl font-black text-yellow-400" style="text-shadow: 0 0 20px rgba(251,191,36,0.5);">0</span>
+                        <span id="prof-score" class="text-3xl font-black text-purple-600">0</span>
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-300 mb-4 italic text-xs leading-relaxed">
-                    "Bangga dengan rekor pukulanmu? Ajak teman-teman dan perkuat provinsimu!"
-                </p>
-
-                <button onclick="shareScore()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl py-3 font-bold text-white shadow-lg shadow-emerald-500/30 active:scale-95 transition-all">
-                    <i class="fas fa-share-alt mr-2"></i> BAGIKAN KEKUATAN
+                <button onclick="shareScore()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl py-3 font-bold text-white">
+                    <i class="fas fa-share-alt mr-2"></i> Bagikan
                 </button>
             </div>
-        </div>
-    </div>
-
-    <!-- Certificate -->
-    <div id="modal-cert" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="w-full max-w-md">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="font-bold text-lg text-white">Sertifikat Penghargaan</h3>
-                <button onclick="closeModal('modal-cert')" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center active:scale-90">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="cert-frame rounded-lg p-6 text-center relative overflow-hidden">
-                <div class="relative z-10">
-                    <div class="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-4 border-yellow-400 mx-auto bg-gray-700 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" class="w-full h-full object-cover">
-                    </div>
-                    
-                    <h1 class="text-2xl font-black text-yellow-400 mb-1 tracking-wider uppercase" style="text-shadow: 0 0 20px rgba(251,191,36,0.5);">Sertifikat</h1>
-                    <p class="text-gray-400 text-xs mb-2">Diberikan dengan bangga kepada:</p>
-                    <h2 id="cert-name" class="text-3xl font-black text-white mb-1">PLAYER</h2>
-                    <p class="text-purple-300 text-sm mb-3">Mewakili <span id="cert-prov">DKI Jakarta</span></p>
-                    
-                    <h3 class="text-lg font-bold text-yellow-400 mb-1">TELAH BERKONTRIBUSI</h3>
-                    <p class="text-4xl font-black text-white mb-1" id="cert-score" style="text-shadow: 0 0 30px rgba(255,255,255,0.3);">0</p>
-                    <p class="text-gray-400 text-xs mb-4">pukulan</p>
-                    
-                    <div class="flex justify-between items-end mt-4 pt-4 border-t border-yellow-400/30 text-[10px]">
-                        <div class="text-left">
-                            <p class="text-gray-400 italic">Pukul Bahlil Team</p>
-                            <p class="text-gray-600">Panitia Resmi</p>
-                        </div>
-                        <div class="w-14 h-14 rounded-full border-2 border-yellow-400 flex items-center justify-center bg-yellow-400/10">
-                            <span class="text-[8px] text-yellow-400 font-bold text-center leading-tight">OFFICIAL<br>SEAL</span>
-                        </div>
-                        <div class="text-right">
-                            <p id="cert-date" class="text-gray-400">8 Maret 2026</p>
-                            <p class="text-gray-600">Tanggal</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <button onclick="downloadCert()" class="mt-3 w-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl py-3 font-bold text-white shadow-lg active:scale-95 transition-all">
-                <i class="fas fa-download mr-2"></i> Unduh Sertifikat
-            </button>
-        </div>
-    </div>
-
-    <!-- Matchmaking -->
-    <div id="modal-match" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="text-center w-full max-w-sm">
-            <div class="flex justify-center items-center gap-6 mb-8">
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-xl font-black border-4 border-yellow-400 shadow-lg shadow-purple-500/50 animate-pulse">YOU</div>
-                    <p class="font-bold mt-2 text-sm text-white" id="match-my-score">0</p>
-                </div>
-                <div class="text-4xl font-black text-red-500 animate-pulse">VS</div>
-                <div class="text-center">
-                    <div id="match-opp-avatar" class="w-20 h-20 bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center text-xl font-black border-4 border-red-400 shadow-lg shadow-red-500/50">?</div>
-                    <p id="match-opp-name" class="font-bold mt-2 text-sm text-white">Waiting...</p>
-                </div>
-            </div>
-            <div id="match-countdown" class="text-7xl font-black text-yellow-400 mb-4" style="text-shadow: 0 0 40px rgba(251,191,36,0.8);">3</div>
-            <p class="text-gray-400 text-sm">Mencari lawan...</p>
-        </div>
-    </div>
-
-    <!-- Battle Arena -->
-    <div id="modal-battle" class="fixed inset-0 bg-gradient-to-b from-purple-900 via-purple-950 to-black z-50 hidden flex flex-col p-4">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-4">
-            <div class="text-center flex-1">
-                <p class="text-xs text-purple-300 uppercase">Kamu</p>
-                <p id="battle-my-name" class="font-bold text-sm text-white truncate">Player</p>
-                <div class="hp-container mt-1">
-                    <div class="hp-bar bg-gradient-to-r from-purple-500 to-blue-500" id="my-hp" style="width: 100%;"></div>
-                </div>
-                <p class="text-[10px] text-purple-300 mt-1" id="my-hp-text">100 HP</p>
-            </div>
-            <div class="px-4">
-                <div class="text-xs text-gray-400 bg-black/30 px-3 py-1 rounded-full">VS</div>
-            </div>
-            <div class="text-center flex-1">
-                <p id="battle-opp-name-display" class="text-xs text-red-300 uppercase truncate">Lawan</p>
-                <p class="font-bold text-sm text-white truncate" id="battle-opp-score-top">0</p>
-                <div class="hp-container mt-1">
-                    <div class="hp-bar bg-gradient-to-r from-red-500 to-orange-500" id="opp-hp" style="width: 100%;"></div>
-                </div>
-                <p class="text-[10px] text-red-300 mt-1" id="opp-hp-text">100 HP</p>
-            </div>
-        </div>
-
-        <!-- Timer -->
-        <div class="text-center mb-4">
-            <div class="inline-block glass px-6 py-2 rounded-2xl">
-                <span id="battle-timer" class="text-4xl font-black text-yellow-400" style="text-shadow: 0 0 30px rgba(251,191,36,0.6);">30</span>
-            </div>
-        </div>
-
-        <!-- Battle Target -->
-        <div class="flex-1 flex items-center justify-center relative">
-            <div class="absolute inset-0 bg-red-500/10 rounded-full blur-3xl animate-pulse"></div>
-            <div class="target-wrapper" id="battle-target" style="width: 220px; height: 220px;">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
-                     class="target-img border-red-400/50" 
-                     style="box-shadow: 0 0 60px rgba(239,68,68,0.4);">
-            </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="flex justify-center gap-8 mt-4 mb-2">
-            <div class="text-center">
-                <p class="text-[10px] text-gray-400">Pukulanmu</p>
-                <p id="my-damage-count" class="text-xl font-bold text-purple-400">0</p>
-            </div>
-            <div class="text-center">
-                <p class="text-[10px] text-gray-400">Lawan</p>
-                <p id="opp-damage-count" class="text-xl font-bold text-red-400">0</p>
-            </div>
-        </div>
-
-        <p class="text-center text-gray-400 text-xs">🔥 Tap cepat untuk menang! 🔥</p>
-    </div>
-
-    <!-- Result -->
-    <div id="modal-result" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-strong rounded-3xl p-6 w-full max-w-sm text-center border border-purple-500/30 modal-enter">
-            <div id="result-icon" class="text-6xl mb-4 animate-bounce">🏆</div>
-            <h2 id="result-title" class="text-3xl font-black mb-2 text-white">MENANG!</h2>
-            <p id="result-desc" class="text-gray-300 mb-4 text-sm">Kamu mengalahkan lawan!</p>
-            
-            <div class="grid grid-cols-2 gap-3 mb-4">
-                <div class="glass rounded-xl p-3 border border-purple-500/20">
-                    <p class="text-[10px] text-gray-400">Pukulanmu</p>
-                    <p id="result-my-damage" class="text-xl font-bold text-purple-400">0</p>
-                </div>
-                <div class="glass rounded-xl p-3 border border-red-500/20">
-                    <p class="text-[10px] text-gray-400">Lawan</p>
-                    <p id="result-opp-damage" class="text-xl font-bold text-red-400">0</p>
-                </div>
-            </div>
-
-            <div class="glass rounded-xl p-3 mb-4 border border-yellow-500/20">
-                <p class="text-[10px] text-gray-400 mb-1">Total Damage</p>
-                <p id="result-total" class="text-2xl font-bold text-yellow-400">0</p>
-            </div>
-            
-            <button onclick="closeModal('modal-result')" class="w-full btn-primary rounded-xl py-3 font-bold text-white active:scale-95 transition-all">
-                Lanjutkan
-            </button>
         </div>
     </div>
 
     <script>
-        // Config
+        // Database Config
         const SUPABASE_URL = 'https://hlibeatwmolpzrckmtdb.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhsaWJlYXR3bW9scHpyY2ttdGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4NjUwMDAsImV4cCI6MjAyNTQ0MTAwMH0.ESV93ymrEuo5iLIei-Uo3w_oYN0g0gB';
         
-        let supabaseClient;
+        let supabaseClient = null;
+        
+        // Initialize Supabase with error handling
         try {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } catch(e) {}
+            if (typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialized');
+            }
+        } catch(e) {
+            console.error('Supabase init failed:', e);
+        }
 
         // State
         const state = {
             userId: localStorage.getItem('userId') || 'usr_' + Date.now(),
             name: localStorage.getItem('userName') || '',
-            province: localStorage.getItem('province') || 'DKI Jakarta',
-            score: 0, // Start from 0
+            province: localStorage.getItem('province') || '',
+            score: parseInt(localStorage.getItem('score')) || 0,
             sound: localStorage.getItem('sound') !== 'false',
-            inBattle: false,
-            myHP: 100,
-            oppHP: 100,
-            myDamage: 0,
-            oppDamage: 0,
-            globalScore: 0
+            globalScore: parseInt(localStorage.getItem('globalScore')) || 0
         };
 
-        // Init
+        // Check if user data exists
         document.addEventListener('DOMContentLoaded', () => {
-            if (!state.name) {
-                document.getElementById('name-page').classList.remove('hidden');
-                document.getElementById('main-game').classList.add('hidden');
+            if (!state.name || !state.province) {
+                showNamePage();
             } else {
-                document.getElementById('name-page').classList.add('hidden');
-                document.getElementById('main-game').classList.remove('hidden');
-                initGame();
+                showGamePage();
             }
         });
 
-        function saveName() {
-            const input = document.getElementById('name-input');
-            const name = input.value.trim();
-            if (!name) {
-                showToast('Masukkan nama dulu!');
-                return;
-            }
-            state.name = name;
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userId', state.userId);
-            
+        function showNamePage() {
+            document.getElementById('name-page').classList.remove('hidden');
+            document.getElementById('main-game').classList.add('hidden');
+        }
+
+        function showGamePage() {
             document.getElementById('name-page').classList.add('hidden');
             document.getElementById('main-game').classList.remove('hidden');
             initGame();
+        }
+
+        function saveUserData() {
+            const nameInput = document.getElementById('name-input');
+            const provinceInput = document.getElementById('province-input');
+            
+            const name = nameInput.value.trim();
+            const province = provinceInput.value;
+            
+            if (!name) {
+                showToast('Masukkan nama!');
+                return;
+            }
+            if (!province) {
+                showToast('Pilih provinsi!');
+                return;
+            }
+            
+            state.name = name;
+            state.province = province;
+            state.userId = 'usr_' + Date.now();
+            
+            localStorage.setItem('userName', name);
+            localStorage.setItem('province', province);
+            localStorage.setItem('userId', state.userId);
+            localStorage.setItem('score', '0');
+            
+            showGamePage();
         }
 
         function initGame() {
             initMarquees();
             updateUI();
             setupTarget();
-            detectLocation();
-            if (supabaseClient) syncUser();
+            loadFromDatabase();
             
             // Show support popup periodically
+            setTimeout(() => {
+                document.getElementById('support-popup').classList.add('show');
+                setTimeout(() => document.getElementById('support-popup').classList.remove('show'), 4000);
+            }, 2000);
+            
             setInterval(() => {
                 const popup = document.getElementById('support-popup');
                 popup.classList.add('show');
-                setTimeout(() => popup.classList.remove('show'), 5000);
-            }, 30000);
+                setTimeout(() => popup.classList.remove('show'), 4000);
+            }, 25000);
         }
 
         function initMarquees() {
-            // Provinces - start from 0 with user included
-            const provinces = [
-                {name: state.province, score: 0, isUser: true},
-                {name: 'Jawa Barat', score: 0},
-                {name: 'Jawa Timur', score: 0},
-                {name: 'Sumatera Utara', score: 0},
-                {name: 'Sulawesi Selatan', score: 0},
-                {name: 'Bali', score: 0},
-                {name: 'Riau', score: 0},
-                {name: 'Aceh', score: 0}
+            // Leaderboard with user
+            const allProvinces = [
+                'Aceh', 'Bali', 'Banten', 'Bengkulu', 'DI Yogyakarta', 'DKI Jakarta',
+                'Gorontalo', 'Jambi', 'Jawa Barat', 'Jawa Tengah', 'Jawa Timur',
+                'Kalimantan Barat', 'Kalimantan Selatan', 'Kalimantan Tengah',
+                'Kalimantan Timur', 'Kalimantan Utara', 'Kepulauan Bangka Belitung',
+                'Kepulauan Riau', 'Lampung', 'Maluku', 'Maluku Utara',
+                'Nusa Tenggara Barat', 'Nusa Tenggara Timur', 'Papua', 'Papua Barat',
+                'Papua Barat Daya', 'Papua Pegunungan', 'Papua Selatan', 'Riau',
+                'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tengah',
+                'Sulawesi Tenggara', 'Sulawesi Utara', 'Sumatera Barat',
+                'Sumatera Selatan', 'Sumatera Utara'
             ];
             
-            const provContainer = document.getElementById('prov-marquee');
-            let provHTML = '';
-            provinces.forEach(p => {
-                const isUserClass = p.isUser ? 'border border-purple-500/50 bg-purple-500/10' : '';
-                provHTML += `<div class="glass px-2 py-1 rounded-lg mx-1 skew-item ${isUserClass}"><span class="unskew text-[10px] font-bold ${p.isUser ? 'text-purple-300' : 'text-white'}">${p.name} <span class="text-purple-300">×0</span></span></div>`;
+            const lbContainer = document.getElementById('leaderboard-marquee');
+            let lbHTML = '';
+            
+            allProvinces.forEach(prov => {
+                const isUser = prov === state.province;
+                const score = isUser ? state.score : Math.floor(Math.random() * 1000);
+                const bgClass = isUser ? 'bg-white/20 border border-white/40' : '';
+                const textClass = isUser ? 'text-yellow-300' : 'text-white';
+                
+                lbHTML += `<div class="glass px-2 py-0.5 rounded mx-1 skew-item ${bgClass}"><span class="unskew text-[9px] font-bold ${textClass}">${prov} <span class="text-white/70">${score}</span></span></div>`;
             });
-            provContainer.innerHTML = provHTML + provHTML;
+            lbContainer.innerHTML = lbHTML + lbHTML;
 
-            // Winners - more items
-            const winners = ['imut', 'araa', 'rijal', 'budi_pro', 'siti_kuat', 'andi_jaya', 'maya_hitam', 'dedi_iron'];
+            // Winners
+            const winners = ['imut', 'araa', 'rijal', 'budi', 'siti', 'andi', 'maya', 'dedi'];
             const winContainer = document.getElementById('winners-marquee');
             let winHTML = '';
             winners.forEach(w => {
-                const wins = Math.floor(Math.random() * 5) + 1;
-                winHTML += `<div class="glass px-2 py-1 rounded-full mx-1 skew-item border border-emerald-500/20"><span class="unskew text-[9px]">🏅 ${w} <span class="text-emerald-400">${wins} MENANG</span></span></div>`;
+                const wins = Math.floor(Math.random() * 10) + 1;
+                winHTML += `<div class="glass px-2 py-0.5 rounded-full mx-1 skew-item"><span class="unskew text-[8px] text-white">🏅 ${w} <span class="text-green-300">${wins}</span></span></div>`;
             });
             winContainer.innerHTML = winHTML + winHTML;
 
             // Donations
-            const donors = ['hamba_allah', 'lia', 'Rafaana', 'budi_s', 'ani_w', 'supporter1', 'peduli', 'dari_hati', 'nurul_h', 'fauzi_99'];
+            const donors = ['hamba_allah', 'lia', 'rafaana', 'budi', 'ani', 'supporter', 'peduli', 'dari_hati'];
             const amounts = [10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000];
             const donContainer = document.getElementById('donation-marquee');
             let donHTML = '';
             donors.forEach(d => {
                 const amt = amounts[Math.floor(Math.random() * amounts.length)];
-                donHTML += `<div class="glass px-2 py-1 rounded-full mx-1 border border-yellow-500/20 skew-item"><span class="unskew text-[9px]"><span class="text-yellow-400 font-bold">Rp${amt.toLocaleString('id-ID')}</span> <span class="text-gray-300">${d}</span></span></div>`;
+                donHTML += `<div class="glass px-2 py-0.5 rounded-full mx-1 skew-item border border-pink-300/30"><span class="unskew text-[8px]"><span class="text-pink-300 font-bold">Rp${(amt/1000).toFixed(0)}k</span> <span class="text-white/70">${d}</span></span></div>`;
             });
             donContainer.innerHTML = donHTML + donHTML;
         }
@@ -899,37 +635,33 @@
                 const x = touch.clientX || rect.left + rect.width/2;
                 const y = touch.clientY || rect.top + rect.height/2;
                 
-                // Big hammer
+                // Hammer
                 const hammer = document.getElementById('hammer');
-                hammer.style.left = (x - 50) + 'px';
-                hammer.style.top = (y - 50) + 'px';
+                hammer.style.left = (x - 40) + 'px';
+                hammer.style.top = (y - 40) + 'px';
                 hammer.classList.add('active');
                 setTimeout(() => hammer.classList.remove('active'), 200);
-                
-                // Gepeng effect handled by CSS :active
                 
                 // Score popup
                 const popup = document.createElement('div');
                 popup.className = 'score-pop';
                 popup.textContent = '+1';
                 popup.style.left = x + 'px';
-                popup.style.top = (y - 60) + 'px';
+                popup.style.top = (y - 50) + 'px';
                 document.body.appendChild(popup);
-                setTimeout(() => popup.remove(), 1000);
+                setTimeout(() => popup.remove(), 800);
                 
-                // Ripple
-                const ripple = document.createElement('div');
-                ripple.className = 'ripple';
-                ripple.style.left = (x - rect.left - 150) + 'px';
-                ripple.style.top = (y - rect.top - 150) + 'px';
-                target.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-                
-                // Update
+                // Update scores
                 state.score++;
                 state.globalScore++;
+                
+                // Save to localStorage immediately
+                localStorage.setItem('score', state.score);
+                localStorage.setItem('globalScore', state.globalScore);
+                
                 updateUI();
-                if (supabaseClient) syncUser();
+                updateLeaderboardScore();
+                saveToDatabase();
                 
                 if (state.sound) playSound();
                 
@@ -942,7 +674,18 @@
             
             target.addEventListener('click', handleHit);
             target.addEventListener('touchstart', handleHit, {passive: false});
-            target.addEventListener('touchmove', (e) => e.preventDefault(), {passive: false});
+        }
+
+        function updateLeaderboardScore() {
+            // Update user score in marquee
+            const marquees = document.querySelectorAll('#leaderboard-marquee .skew-item');
+            marquees.forEach(item => {
+                const text = item.textContent;
+                if (text.includes(state.province)) {
+                    const span = item.querySelector('span span');
+                    if (span) span.textContent = state.score;
+                }
+            });
         }
 
         function playSound() {
@@ -952,22 +695,21 @@
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-                osc.frequency.value = 500 + Math.random() * 300;
-                osc.type = 'square';
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+                osc.frequency.value = 600 + Math.random() * 400;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
                 osc.start();
-                osc.stop(ctx.currentTime + 0.08);
+                osc.stop(ctx.currentTime + 0.1);
             } catch(e) {}
         }
 
         function createConfetti() {
-            const colors = ['#fbbf24', '#8b5cf6', '#3b82f6', '#ef4444', '#10b981', '#f472b6'];
-            for (let i = 0; i < 25; i++) {
+            const colors = ['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#7B68EE'];
+            for (let i = 0; i < 20; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
                 c.style.left = Math.random() * 100 + '%';
-                c.style.top = '-10px';
                 c.style.background = colors[Math.floor(Math.random() * colors.length)];
                 c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
                 c.style.animationDuration = (2 + Math.random() * 2) + 's';
@@ -978,56 +720,84 @@
 
         function updateUI() {
             document.getElementById('user-score').textContent = state.score.toLocaleString('id-ID');
-            document.getElementById('prof-name').textContent = state.name;
-            document.getElementById('prof-score').textContent = state.score.toLocaleString('id-ID');
-            document.getElementById('prof-province').textContent = 'Petarung dari ' + state.province;
-            document.getElementById('user-province').textContent = state.province;
-            document.getElementById('cert-name').textContent = state.name;
-            document.getElementById('cert-prov').textContent = state.province;
-            document.getElementById('cert-score').textContent = state.score.toLocaleString('id-ID');
-            document.getElementById('cert-date').textContent = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
             document.getElementById('global-score').textContent = '×' + state.globalScore.toLocaleString('id-ID');
-        }
-
-        function detectLocation() {
-            const provinces = ['DKI Jakarta', 'Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'Sumatera Utara', 'Sulawesi Selatan', 'Bali', 'Sumatera Barat', 'Riau', 'Aceh'];
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(() => {
-                    const prov = provinces[Math.floor(Math.random() * provinces.length)];
-                    state.province = prov;
-                    localStorage.setItem('province', prov);
-                    updateUI();
-                    initMarquees(); // Refresh to show user province
-                }, () => {
-                    updateUI();
-                });
+            document.getElementById('user-province').textContent = state.province;
+            document.getElementById('prof-name').textContent = state.name;
+            document.getElementById('prof-province').textContent = state.province;
+            document.getElementById('prof-score').textContent = state.score.toLocaleString('id-ID');
+            
+            // Update sound icon
+            const icon = document.querySelector('#sound-btn i');
+            if (icon) {
+                icon.className = state.sound ? 'fas fa-volume-up text-sm' : 'fas fa-volume-mute text-sm';
             }
         }
 
-        async function syncUser() {
-            if (!supabaseClient) return;
+        async function saveToDatabase() {
+            if (!supabaseClient) {
+                console.log('Supabase not available, using localStorage only');
+                return;
+            }
+            
             try {
-                await supabaseClient.from('players').upsert({
-                    id: state.userId,
-                    name: state.name,
-                    province: state.province,
-                    score: state.score,
-                    updated_at: new Date().toISOString()
-                });
-            } catch(e) {}
+                const { error } = await supabaseClient
+                    .from('players')
+                    .upsert({
+                        id: state.userId,
+                        name: state.name,
+                        province: state.province,
+                        score: state.score,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'id'
+                    });
+                
+                if (error) {
+                    console.error('Save error:', error);
+                } else {
+                    console.log('Saved to database');
+                }
+            } catch(e) {
+                console.error('Database error:', e);
+            }
         }
 
-        // Modals
-        function openVersus() {
-            document.getElementById('modal-versus').classList.remove('hidden');
+        async function loadFromDatabase() {
+            if (!supabaseClient) return;
+            
+            try {
+                // Load user's score
+                const { data, error } = await supabaseClient
+                    .from('players')
+                    .select('score')
+                    .eq('id', state.userId)
+                    .single();
+                
+                if (data && data.score > state.score) {
+                    state.score = data.score;
+                    localStorage.setItem('score', state.score);
+                    updateUI();
+                    updateLeaderboardScore();
+                }
+                
+                // Calculate global score
+                const { data: allPlayers, error: countError } = await supabaseClient
+                    .from('players')
+                    .select('score');
+                
+                if (allPlayers) {
+                    const total = allPlayers.reduce((sum, p) => sum + (p.score || 0), 0);
+                    state.globalScore = total;
+                    localStorage.setItem('globalScore', state.globalScore);
+                    updateUI();
+                }
+            } catch(e) {
+                console.error('Load error:', e);
+            }
         }
 
         function openProfile() {
             document.getElementById('modal-profile').classList.remove('hidden');
-        }
-
-        function openCertificate() {
-            document.getElementById('modal-cert').classList.remove('hidden');
         }
 
         function closeModal(id) {
@@ -1037,15 +807,14 @@
         function toggleSound() {
             state.sound = !state.sound;
             localStorage.setItem('sound', state.sound);
-            const icon = document.querySelector('#sound-btn i');
-            icon.className = state.sound ? 'fas fa-volume-up text-green-400' : 'fas fa-volume-mute text-red-400';
+            updateUI();
             showToast(state.sound ? '🔊 Sound ON' : '🔇 Sound OFF');
         }
 
         function showSupportPopup() {
             const popup = document.getElementById('support-popup');
             popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 5000);
+            setTimeout(() => popup.classList.remove('show'), 4000);
         }
 
         function openSaweria() {
@@ -1053,7 +822,7 @@
         }
 
         function shareScore() {
-            const text = `🔥 ${state.name} memukul ${state.score.toLocaleString('id-ID')}x di Pukul Bahlil! Mewakili ${state.province} 💪`;
+            const text = `🔥 ${state.name} memukul ${state.score.toLocaleString('id-ID')}x di Pukul Bahlil!`;
             if (navigator.share) {
                 navigator.share({title: 'Pukul Bahlil', text: text});
             } else {
@@ -1062,203 +831,19 @@
             }
         }
 
-        function downloadCert() {
-            showToast('📥 Menyiapkan sertifikat...');
-            setTimeout(() => showToast('✅ Sertifikat tersimpan!'), 1500);
-        }
-
         function showToast(msg) {
             const toast = document.getElementById('toast');
-            document.getElementById('toast-text').textContent = msg;
+            toast.textContent = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // Battle System
-        function findMatch() {
-            closeModal('modal-versus');
-            document.getElementById('modal-match').classList.remove('hidden');
-            
-            const names = ['BudiGaming', 'AndiPro', 'SitiKuat', 'RudiJablay', 'MayaHitam', 'DediKawat', 'LinaTinju', 'RajaPukul'];
-            const opp = names[Math.floor(Math.random() * names.length)];
-            
-            setTimeout(() => {
-                document.getElementById('match-opp-name').textContent = opp;
-                document.getElementById('match-opp-avatar').textContent = opp.substring(0,2).toUpperCase();
-                
-                let count = 3;
-                const cd = setInterval(() => {
-                    count--;
-                    document.getElementById('match-countdown').textContent = count;
-                    if (count <= 0) {
-                        clearInterval(cd);
-                        startBattle(opp);
-                    }
-                }, 800);
-            }, 1200);
-        }
-
-        function challengeByName() {
-            const name = prompt('Nama lawan:');
-            if (name && name.trim()) {
-                closeModal('modal-versus');
-                document.getElementById('modal-match').classList.remove('hidden');
-                setTimeout(() => {
-                    document.getElementById('match-opp-name').textContent = name;
-                    document.getElementById('match-opp-avatar').textContent = name.substring(0,2).toUpperCase();
-                    let count = 3;
-                    const cd = setInterval(() => {
-                        count--;
-                        document.getElementById('match-countdown').textContent = count;
-                        if (count <= 0) {
-                            clearInterval(cd);
-                            startBattle(name);
-                        }
-                    }, 800);
-                }, 800);
-            }
-        }
-
-        function startBattle(oppName) {
-            closeModal('modal-match');
-            document.getElementById('modal-battle').classList.remove('hidden');
-            
-            state.inBattle = true;
-            state.myHP = 100;
-            state.oppHP = 100;
-            state.myDamage = 0;
-            state.oppDamage = 0;
-            
-            document.getElementById('battle-my-name').textContent = state.name;
-            document.getElementById('battle-opp-name-display').textContent = oppName;
-            updateHP();
-            
-            // Setup battle target
-            const bTarget = document.getElementById('battle-target');
-            
-            const battleHit = (e) => {
-                e.preventDefault();
-                if (!state.inBattle) return;
-                
-                const touch = e.touches ? e.touches[0] : e;
-                const rect = bTarget.getBoundingClientRect();
-                const x = touch.clientX || rect.left + rect.width/2;
-                const y = touch.clientY || rect.top + rect.height/2;
-                
-                // Hammer
-                const hammer = document.getElementById('hammer');
-                hammer.style.left = (x - 50) + 'px';
-                hammer.style.top = (y - 50) + 'px';
-                hammer.classList.add('active');
-                setTimeout(() => hammer.classList.remove('active'), 200);
-                
-                // Damage
-                const dmg = Math.floor(Math.random() * 4) + 2;
-                state.oppHP = Math.max(0, state.oppHP - dmg);
-                state.myDamage++;
-                
-                // Visual
-                const popup = document.createElement('div');
-                popup.className = 'damage-num';
-                popup.textContent = '-' + dmg;
-                popup.style.color = '#ef4444';
-                popup.style.left = x + 'px';
-                popup.style.top = (y - 80) + 'px';
-                document.body.appendChild(popup);
-                setTimeout(() => popup.remove(), 800);
-                
-                // Gepeng
-                const img = bTarget.querySelector('img');
-                img.style.transform = 'scaleY(0.85) scaleX(1.05)';
-                setTimeout(() => img.style.transform = '', 100);
-                
-                updateHP();
-                if (state.sound) playSound();
-                
-                if (state.oppHP <= 0) endBattle(true);
-            };
-            
-            bTarget.addEventListener('click', battleHit);
-            bTarget.addEventListener('touchstart', battleHit, {passive: false});
-            bTarget.addEventListener('touchmove', (e) => e.preventDefault(), {passive: false});
-            
-            // Timer & AI
-            let timeLeft = 30;
-            const timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('battle-timer').textContent = timeLeft;
-                
-                // AI attacks
-                if (Math.random() > 0.5) {
-                    const aiDmg = Math.floor(Math.random() * 5) + 2;
-                    state.myHP = Math.max(0, state.myHP - aiDmg);
-                    state.oppDamage++;
-                    updateHP();
-                    
-                    // Screen flash red
-                    document.body.style.background = 'linear-gradient(180deg, #450a0a 0%, #1a0a2e 100%)';
-                    setTimeout(() => {
-                        document.body.style.background = '';
-                    }, 150);
-                }
-                
-                if (timeLeft <= 0 || state.myHP <= 0) {
-                    clearInterval(timer);
-                    endBattle(state.myHP > state.oppHP);
-                }
-            }, 1000);
-        }
-
-        function updateHP() {
-            document.getElementById('my-hp').style.width = state.myHP + '%';
-            document.getElementById('opp-hp').style.width = state.oppHP + '%';
-            document.getElementById('my-hp-text').textContent = state.myHP + ' HP';
-            document.getElementById('opp-hp-text').textContent = state.oppHP + ' HP';
-            document.getElementById('my-damage-count').textContent = state.myDamage;
-            document.getElementById('opp-damage-count').textContent = state.oppDamage;
-            document.getElementById('battle-opp-score-top').textContent = state.oppDamage;
-        }
-
-        function endBattle(won) {
-            state.inBattle = false;
-            
-            setTimeout(() => {
-                document.getElementById('modal-battle').classList.add('hidden');
-                document.getElementById('modal-result').classList.remove('hidden');
-                
-                document.getElementById('result-icon').textContent = won ? '🏆' : '💔';
-                document.getElementById('result-title').textContent = won ? 'VICTORY!' : 'DEFEAT';
-                document.getElementById('result-title').className = won ? 'text-3xl font-black mb-2 text-yellow-400' : 'text-3xl font-black mb-2 text-red-400';
-                document.getElementById('result-desc').textContent = won ? 'Kamu mengalahkan lawan dengan telak!' : 'Lawan terlalu kuat, latih lagi!';
-                document.getElementById('result-my-damage').textContent = state.myDamage;
-                document.getElementById('result-opp-damage').textContent = state.oppDamage;
-                document.getElementById('result-total').textContent = state.myDamage + ' pukulan';
-                
-                if (won && supabaseClient) {
-                    supabaseClient.rpc('increment_wins', {user_id: state.userId}).catch(()=>{});
-                }
-            }, 500);
-        }
-
-        // Close on outside
+        // Close modal on outside click
         window.onclick = (e) => {
-            if (e.target.classList.contains('fixed') && !e.target.id.includes('battle')) {
-                e.target.classList.add('hidden');
+            if (e.target.id === 'modal-profile') {
+                closeModal('modal-profile');
             }
         };
-
-        // Shimmer animation for support button
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shimmer {
-                0% { transform: translateX(-100%); }
-                100% { transform: translateX(100%); }
-            }
-            .animate-shimmer {
-                animation: shimmer 2s infinite;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
