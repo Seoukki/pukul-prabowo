@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pukul Bahlil - Game Interaktif</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        
+        body {
+            background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 30%, #3b82f6 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Background Effects */
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(147, 197, 253, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(30, 58, 138, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(30, 58, 138, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(147, 197, 253, 0.2);
+        }
+        
+        /* Hammer Cursor */
+        .hammer-cursor {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            transform-origin: bottom center;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+        }
+        
+        .hammer-cursor.active {
+            display: block;
+            animation: hammerSmash 0.25s ease-out;
+        }
+        
+        @keyframes hammerSmash {
+            0% { transform: rotate(-30deg) scale(0.8); }
+            50% { transform: rotate(0deg) scale(1.1); }
+            100% { transform: rotate(30deg) scale(1); }
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .float-target {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Glow Effects */
+        .glow-blue {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5),
+                        0 0 60px rgba(59, 130, 246, 0.3),
+                        0 0 90px rgba(59, 130, 246, 0.1);
+        }
+        
+        .text-glow {
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.8),
+                         0 0 40px rgba(251, 191, 36, 0.4);
+        }
+        
+        /* Score Pop Animation */
+        @keyframes scoreFloat {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            20% { transform: scale(1.3) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1) translateY(-50px); opacity: 0; }
+        }
+        
+        .score-pop {
+            position: absolute;
+            color: #fbbf24;
+            font-weight: 900;
+            font-size: 28px;
+            pointer-events: none;
+            animation: scoreFloat 1s ease-out forwards;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 1);
+            z-index: 100;
+        }
+        
+        /* Shake Effect */
+        @keyframes shakeHard {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-3px, -3px) rotate(-2deg); }
+            20% { transform: translate(3px, 3px) rotate(2deg); }
+            30% { transform: translate(-3px, 3px) rotate(-1deg); }
+            40% { transform: translate(3px, -3px) rotate(1deg); }
+            50% { transform: translate(-2px, 2px) rotate(0deg); }
+        }
+        
+        .shake-active {
+            animation: shakeHard 0.4s ease-in-out;
+        }
+        
+        /* Skewed Leaderboard */
+        .skew-container {
+            transform: skewX(-12deg);
+        }
+        
+        .unskew {
+            transform: skewX(12deg);
+        }
+        
+        /* Custom Scrollbar */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border: 2px solid rgba(147, 197, 253, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+        }
+        
+        .btn-secondary {
+            background: rgba(30, 58, 138, 0.6);
+            border: 2px solid rgba(147, 197, 253, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:active {
+            transform: scale(0.95);
+            background: rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        
+        /* Certificate */
+        .cert-bg {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+            border: 3px solid #fbbf24;
+            position: relative;
+        }
+        
+        .cert-bg::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            pointer-events: none;
+        }
+        
+        /* Pulse Ring */
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            inset: -10px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 50%;
+            animation: pulseRing 2s infinite;
+        }
+        
+        /* Particle */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(147, 197, 253, 0.3);
+            pointer-events: none;
+        }
+        
+        /* Confetti */
+        @keyframes confettiDrop {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            animation: confettiDrop 4s linear forwards;
+        }
+        
+        /* Side Buttons */
+        .side-btn {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(147, 197, 253, 0.2);
+            transition: all 0.2s;
+        }
+        
+        .side-btn:active {
+            transform: scale(0.9);
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Support Banner */
+        .support-banner {
+            background: linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #f59e0b 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Loading */
+        .loading-pulse {
+            animation: loadingPulse 1.5s infinite;
+        }
+        
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Background -->
+    <div class="bg-pattern"></div>
+    <div id="particles"></div>
+    
+    <!-- Hammer -->
+    <div id="hammer" class="hammer-cursor">
+        <svg viewBox="0 0 100 100" fill="none">
+            <rect x="48" y="35" width="4" height="50" fill="#8B4513" rx="2"/>
+            <rect x="35" y="20" width="30" height="20" fill="#FFD700" rx="2"/>
+            <rect x="30" y="22" width="5" height="16" fill="#B8860B" rx="1"/>
+            <rect x="65" y="22" width="5" height="16" fill="#B8860B" rx="1"/>
+            <circle cx="50" cy="15" r="10" fill="#DC2626"/>
+        </svg>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative w-full h-full flex flex-col max-w-md mx-auto p-3">
+        
+        <!-- Global Stats -->
+        <div class="glass-panel rounded-2xl p-3 mb-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">🌍</span>
+                <div>
+                    <p class="text-[10px] text-blue-300 uppercase tracking-wider">Total Pukulan</p>
+                    <p id="global-score" class="font-bold text-sm text-yellow-400 text-glow">0</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-blue-300 uppercase tracking-wider">Provinsi</p>
+                <p id="current-province" class="font-bold text-xs text-white loading-pulse">Detecting...</p>
+            </div>
+        </div>
+
+        <!-- Leaderboard Provinsi -->
+        <div class="mb-3">
+            <h3 class="text-center font-bold text-xs mb-2 text-blue-200 uppercase tracking-wider">
+                <i class="fas fa-trophy text-yellow-400 mr-1"></i> Leaderboard Pukulan
+            </h3>
+            <div class="skew-container overflow-x-auto hide-scroll pb-1">
+                <div id="province-leaderboard" class="flex gap-2 unskew px-2">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Versus Winners -->
+        <div class="glass-card rounded-xl p-2 mb-3">
+            <h4 class="text-center font-bold text-[10px] mb-2 text-blue-200 uppercase">
+                <i class="fas fa-khanda text-red-400 mr-1"></i> Top Versus Winners
+            </h4>
+            <div id="versus-winners" class="flex justify-center gap-2 flex-wrap">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <!-- Top Supporter -->
+        <div class="glass-card rounded-xl p-2 mb-3">
+            <div class="flex items-center justify-center gap-1 mb-1">
+                <i class="fas fa-gem text-blue-300 text-xs"></i>
+                <h4 class="text-center font-bold text-[10px] text-blue-200 uppercase">Top Supporter Saweria</h4>
+            </div>
+            <p class="text-center text-[9px] text-gray-400 mb-2">(100% DANA AKAN DI DONASIKAN KE PANTI ASUHAN)</p>
+            <div id="donation-leaderboard" class="skew-container overflow-x-auto hide-scroll">
+                <div class="flex gap-2 unskew px-2" id="donation-list">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="flex-1 flex flex-col items-center justify-center relative">
+            
+            <!-- Target Image -->
+            <div class="relative mb-4 float-target cursor-pointer" id="target-container">
+                <div class="pulse-ring"></div>
+                <div class="absolute inset-0 bg-blue-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                <img id="target-img" 
+                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
+                     class="w-48 h-48 rounded-full object-cover border-4 border-blue-400/50 glow-blue relative z-10"
+                     alt="Target">
+            </div>
+
+            <!-- Score -->
+            <div class="text-center mb-4">
+                <p class="text-blue-300 text-xs uppercase tracking-widest mb-1">Total Pukulan Saya</p>
+                <div class="flex items-center justify-center gap-2">
+                    <span class="text-3xl">🥊</span>
+                    <span id="user-score" class="text-5xl font-black text-yellow-400 text-glow">0</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-3 w-full max-w-xs mb-4">
+                <button onclick="openVersus()" class="btn-primary rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2">
+                    <i class="fas fa-bolt"></i> VERSUS
+                </button>
+                <button onclick="openCertificate()" class="btn-secondary rounded-xl py-3 px-4 font-bold text-sm flex items-center justify-center gap-2 text-yellow-300 border-yellow-400/30">
+                    <i class="fas fa-scroll"></i> SERTIFIKAT
+                </button>
+            </div>
+        </div>
+
+        <!-- Side Menu -->
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-20">
+            <button onclick="openProfile()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-blue-300"></i>
+            </button>
+            <button onclick="openVersus()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
+                <i class="fas fa-khanda text-red-300"></i>
+            </button>
+            <button onclick="openCertificate()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
+                <i class="fas fa-certificate text-yellow-300"></i>
+            </button>
+            <button onclick="toggleSound()" id="sound-toggle" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
+                <i class="fas fa-volume-up text-green-300"></i>
+            </button>
+            <button onclick="showInfo()" class="side-btn w-11 h-11 rounded-full flex items-center justify-center">
+                <i class="fas fa-info text-purple-300"></i>
+            </button>
+        </div>
+
+        <!-- Support Button -->
+        <button onclick="openSaweria()" class="support-banner rounded-full py-3 px-6 w-full">
+            <p class="font-bold text-sm text-black flex items-center justify-center gap-2">
+                <i class="fas fa-heart"></i>
+                Jangan Lupa Support di Saweria YA!!!
+            </p>
+        </button>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Versus Modal -->
+    <div id="modal-versus" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl p-6 w-full max-w-sm relative border border-blue-500/30">
+            <button onclick="closeModal('modal-versus')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-90 transition-transform">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-2">⚔️</div>
+                <h2 class="text-2xl font-black mb-1">PILIH MODE VERSUS</h2>
+                <p class="text-xs text-gray-400">Tantang pemain lain secara real-time!</p>
+            </div>
+
+            <button onclick="findAutoMatch()" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl py-4 mb-3 font-bold active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30">
+                <i class="fas fa-random"></i> CARI OTOMATIS
+            </button>
+            
+            <button onclick="challengeByName()" class="w-full glass-card rounded-xl py-4 font-bold active:scale-95 transition-transform flex items-center justify-center gap-2 border border-white/20">
+                <i class="fas fa-user-friends"></i> LAWAN TEMAN (BY NAME)
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="modal-profile" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl p-6 w-full max-w-sm relative border border-blue-500/30">
+            <button onclick="closeModal('modal-profile')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-90 transition-transform">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="text-center">
+                <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl shadow-lg shadow-blue-500/50">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 id="profile-name" class="text-2xl font-black mb-1">PLAYER</h2>
+                <p id="profile-province" class="text-blue-300 text-sm mb-4">Loading...</p>
+                
+                <div class="glass-card rounded-xl p-4 mb-4 border border-blue-400/20">
+                    <p class="text-xs text-gray-400 mb-1 uppercase tracking-wider">Total Pukulan Saya</p>
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="text-2xl">🥊</span>
+                        <span id="profile-score" class="text-3xl font-black text-yellow-400 text-glow">0</span>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-300 mb-4 italic leading-relaxed">
+                    "Bangga dengan rekor pukulanmu? Ajak teman-teman dan perkuat <span id="profile-province-text">provinsimu</span>!"
+                </p>
+
+                <button onclick="sharePower()" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl py-3 font-bold active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30">
+                    <i class="fas fa-share-alt"></i> BAGIKAN KEKUATAN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div id="modal-certificate" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Sertifikat Penghargaan</h3>
+                <button onclick="closeModal('modal-certificate')" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-90 transition-transform">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cert-content" class="cert-bg rounded-lg p-6 text-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-4 border-yellow-400 shadow-lg mx-auto">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <h1 class="text-2xl font-black text-yellow-400 mb-1 tracking-wider uppercase">Sertifikat Penghargaan</h1>
+                    <p class="text-gray-300 text-sm mb-2">Diberikan dengan bangga kepada:</p>
+                    
+                    <h2 id="cert-name" class="text-3xl font-black text-white mb-1 uppercase">PLAYER</h2>
+                    <p class="text-blue-300 text-sm mb-3">Mewakili Provinsi <span id="cert-province">DKI Jakarta</span></p>
+                    
+                    <h3 class="text-xl font-bold text-yellow-400 mb-1">TELAH BERKONTRIBUSI</h3>
+                    <p class="text-3xl font-black text-white mb-1"><span id="cert-score">0</span> PUKULAN!</p>
+                    
+                    <p class="text-gray-400 text-xs mb-4">Total Pukulan <span id="cert-province-total">DKI Jakarta</span>: <span id="cert-total">0</span></p>
+                    
+                    <div class="flex justify-between items-end mt-6 pt-4 border-t border-yellow-400/30">
+                        <div class="text-left">
+                            <p class="text-xs text-gray-400 italic">Pukul Bahlil Team</p>
+                            <p class="text-[10px] text-gray-500">Panitia Resmi</p>
+                        </div>
+                        <div class="w-14 h-14 rounded-full border-2 border-yellow-400 flex items-center justify-center bg-yellow-400/10">
+                            <span class="text-[8px] text-yellow-400 font-bold text-center leading-tight">OFFICIAL<br>SEAL</span>
+                        </div>
+                        <div class="text-right">
+                            <p id="cert-date" class="text-xs text-gray-400">8 Maret 2026</p>
+                            <p class="text-[10px] text-gray-500">Tanggal Diterbitkan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                    <div class="absolute top-10 left-10 w-32 h-32 border border-yellow-400 rounded-full"></div>
+                    <div class="absolute bottom-10 right-10 w-24 h-24 border border-yellow-400 rounded-full"></div>
+                </div>
+            </div>
+            
+            <button onclick="downloadCert()" class="mt-4 w-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl py-3 font-bold active:scale-95 transition-transform flex items-center justify-center gap-2">
+                <i class="fas fa-download"></i> Unduh Sertifikat
+            </button>
+        </div>
+    </div>
+
+    <!-- Matchmaking Modal -->
+    <div id="modal-match" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4">
+        <div class="text-center w-full max-w-sm">
+            <div class="flex justify-center items-center gap-6 mb-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-xl font-black border-4 border-yellow-400 shadow-lg shadow-blue-500/50">
+                        YOU
+                    </div>
+                    <p class="font-bold mt-2 text-sm">0</p>
+                </div>
+                <div class="text-4xl font-black text-red-500 animate-pulse">VS</div>
+                <div class="text-center">
+                    <div id="match-opponent-avatar" class="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-xl font-black border-4 border-red-400 shadow-lg shadow-red-500/50">
+                        ?
+                    </div>
+                    <p id="match-opponent-name" class="font-bold mt-2 text-sm">Waiting...</p>
+                </div>
+            </div>
+            
+            <div id="match-countdown" class="text-7xl font-black text-yellow-400 text-glow mb-4">3</div>
+            <p class="text-gray-400 text-sm">Bersiap untuk bertarung!</p>
+        </div>
+    </div>
+
+    <!-- Battle Modal -->
+    <div id="modal-battle" class="fixed inset-0 bg-black/95 z-50 hidden flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-sm">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-center">
+                    <p class="text-xs text-blue-300">YOU</p>
+                    <p id="battle-my-score" class="text-2xl font-bold text-blue-400">0</p>
+                </div>
+                <div class="text-xl font-bold text-red-500">VS</div>
+                <div class="text-center">
+                    <p id="battle-opponent-name-display" class="text-xs text-red-300">OPPONENT</p>
+                    <p id="battle-opponent-score" class="text-2xl font-bold text-red-400">0</p>
+                </div>
+            </div>
+            
+            <div class="text-center mb-6">
+                <div class="text-5xl font-black text-yellow-400 text-glow" id="battle-timer">30</div>
+            </div>
+            
+            <div class="relative mb-6">
+                <div class="pulse-ring"></div>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" 
+                     class="w-48 h-48 rounded-full mx-auto object-cover border-4 border-red-400 glow-blue cursor-pointer active:scale-95 transition-transform"
+                     onclick="battleClick(event)"
+                     id="battle-target">
+            </div>
+            
+            <p class="text-center text-gray-400 text-sm">Pukul secepat mungkin!</p>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="modal-result" class="fixed inset-0 modal-overlay z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-3xl p-6 w-full max-w-sm text-center border border-blue-500/30">
+            <div id="result-icon" class="text-6xl mb-4">🏆</div>
+            <h2 id="result-title" class="text-2xl font-black mb-2">MENANG!</h2>
+            <p id="result-message" class="text-gray-300 mb-4">Selamat atas kemenanganmu!</p>
+            
+            <div class="flex justify-center gap-4 mb-4">
+                <div class="text-center">
+                    <p class="text-xs text-gray-400">Skor Kamu</p>
+                    <p id="result-my-score" class="text-xl font-bold text-blue-400">0</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-400">Lawan</p>
+                    <p id="result-opponent-score" class="text-xl font-bold text-red-400">0</p>
+                </div>
+            </div>
+            
+            <button onclick="closeModal('modal-result')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl py-3 font-bold active:scale-95 transition-transform">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 glass-panel px-6 py-3 rounded-full hidden z-50 border border-blue-400/30">
+        <p id="toast-msg" class="text-sm font-bold"></p>
+    </div>
+
+    <script>
+        // ==========================================
+        // SUPABASE CONFIGURATION
+        // ==========================================
+        const SUPABASE_URL = 'https://hlibeatwmolpzrckmtdb.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ESV93ymrEuo5iLIei-Uo3w_oYN0g0gB';
+        
+        let supabaseClient;
+        let realtimeChannel;
+        
+        // Initialize Supabase
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            console.log('Supabase connected successfully');
+        } catch (e) {
+            console.error('Supabase connection failed:', e);
+            showToast('Database connection failed!');
+        }
+
+        // ==========================================
+        // GAME STATE
+        // ==========================================
+        const gameState = {
+            userId: localStorage.getItem('userId') || generateId(),
+            userName: localStorage.getItem('userName') || 'Player' + Math.floor(Math.random() * 9999),
+            province: localStorage.getItem('province') || 'DKI Jakarta',
+            score: parseInt(localStorage.getItem('score')) || 0,
+            soundEnabled: localStorage.getItem('soundEnabled') !== 'false',
+            isVersusMode: false,
+            battleScore: 0,
+            opponentScore: 0,
+            opponentName: '',
+            globalScore: 0
+        };
+
+        // Save userId if new
+        if (!localStorage.getItem('userId')) {
+            localStorage.setItem('userId', gameState.userId);
+        }
+
+        function generateId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            initParticles();
+            await detectLocation();
+            await initUser();
+            updateUI();
+            startRealtimeListener();
+            loadLeaderboards();
+            generateRandomDonations();
+            
+            // Setup click handler for main target
+            const target = document.getElementById('target-container');
+            target.addEventListener('click', handleMainClick);
+            
+            // Entrance animation
+            gsap.from('.glass-panel, .glass-card', {
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+            
+            gsap.from('#target-container', {
+                scale: 0,
+                rotation: 360,
+                duration: 0.8,
+                ease: "back.out(1.7)"
+            });
+            
+            // Update sound icon
+            updateSoundIcon();
+        });
+
+        // ==========================================
+        // PARTICLES
+        // ==========================================
+        function initParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 8 + 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.top = Math.random() * 100 + '%';
+                p.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                gsap.to(p, {
+                    y: -100 - Math.random() * 200,
+                    x: Math.random() * 100 - 50,
+                    duration: 10 + Math.random() * 10,
+                    repeat: -1,
+                    ease: "none",
+                    delay: Math.random() * 5
+                });
+                
+                container.appendChild(p);
+            }
+        }
+
+        // ==========================================
+        // LOCATION DETECTION
+        // ==========================================
+        async function detectLocation() {
+            const provinces = [
+                'DKI Jakarta', 'Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 
+                'Sumatera Utara', 'Sulawesi Selatan', 'Bali', 'Sumatera Barat',
+                'Kalimantan Selatan', 'Riau', 'Lampung', 'Aceh'
+            ];
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        // Simulate province detection based on coords
+                        const randomProv = provinces[Math.floor(Math.random() * provinces.length)];
+                        gameState.province = randomProv;
+                        localStorage.setItem('province', randomProv);
+                        updateUI();
+                        syncToDatabase();
+                    },
+                    (err) => {
+                        // Default to stored or random
+                        if (!localStorage.getItem('province')) {
+                            gameState.province = 'DKI Jakarta';
+                            localStorage.setItem('province', 'DKI Jakarta');
+                        }
+                        updateUI();
+                        syncToDatabase();
+                    }
+                );
+            } else {
+                updateUI();
+                syncToDatabase();
+            }
+        }
+
+        // ==========================================
+        // DATABASE OPERATIONS
+        // ==========================================
+        async function initUser() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('players')
+                    .select('*')
+                    .eq('id', gameState.userId)
+                    .single();
+                
+                if (error && error.code === 'PGRST116') {
+                    // User doesn't exist, create new
+                    await supabaseClient.from('players').insert({
+                        id: gameState.userId,
+                        name: gameState.userName,
+                        province: gameState.province,
+                        score: gameState.score,
+                        wins: 0,
+                        losses: 0,
+                        created_at: new Date().toISOString()
+                    });
+                } else if (data) {
+                    // Load existing data
+                    gameState.score = data.score || 0;
+                    gameState.userName = data.name || gameState.userName;
+                    gameState.province = data.province || gameState.province;
+                    localStorage.setItem('score', gameState.score);
+                    localStorage.setItem('userName', gameState.userName);
+                    localStorage.setItem('province', gameState.province);
+                }
+            } catch (e) {
+                console.error('Init user error:', e);
+            }
+        }
+
+        async function syncToDatabase() {
+            if (!supabaseClient) return;
+            
+            try {
+                await supabaseClient
+                    .from('players')
+                    .upsert({
+                        id: gameState.userId,
+                        name: gameState.userName,
+                        province: gameState.province,
+                        score: gameState.score,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'id' });
+            } catch (e) {
+                console.error('Sync error:', e);
+            }
+        }
+
+        function startRealtimeListener() {
+            if (!supabaseClient) {
+                // Fallback: simulate with interval
+                setInterval(loadLeaderboards, 5000);
+                return;
+            }
+            
+            // Subscribe to all changes
+            realtimeChannel = supabaseClient
+                .channel('public:players')
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'players' },
+                    (payload) => {
+                        console.log('Realtime update:', payload);
+                        loadLeaderboards();
+                    }
+                )
+                .subscribe();
+                
+            // Initial load
+            loadLeaderboards();
+            
+            // Periodic refresh as backup
+            setInterval(loadLeaderboards, 10000);
+        }
+
+        async function loadLeaderboards() {
+            if (!supabaseClient) {
+                loadMockData();
+                return;
+            }
+            
+            try {
+                // Load top players by province
+                const { data: players, error } = await supabaseClient
+                    .from('players')
+                    .select('province, score')
+                    .order('score', { ascending: false })
+                    .limit(100);
+                
+                if (error) throw error;
+                
+                // Aggregate by province
+                const provinceScores = {};
+                players.forEach(p => {
+                    if (!provinceScores[p.province]) {
+                        provinceScores[p.province] = 0;
+                    }
+                    provinceScores[p.province] += p.score;
+                });
+                
+                // Sort and take top 6
+                const sortedProvinces = Object.entries(provinceScores)
+                    .map(([province, score]) => ({ province, score }))
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 6);
+                
+                updateProvinceLeaderboard(sortedProvinces);
+                
+                // Calculate global total
+                const globalTotal = players.reduce((a, b) => a + b.score, 0);
+                gameState.globalScore = globalTotal;
+                document.getElementById('global-score').textContent = '×' + globalTotal.toLocaleString('id-ID');
+                
+                // Load top winners (most wins)
+                const { data: winners } = await supabaseClient
+                    .from('players')
+                    .select('name, wins')
+                    .order('wins', { ascending: false })
+                    .limit(5);
+                    
+                updateTopWinners(winners || []);
+                
+            } catch (e) {
+                console.error('Load leaderboard error:', e);
+                loadMockData();
+            }
+        }
+
+        function loadMockData() {
+            // Mock data for demo
+            const mockProvinces = [
+                { province: 'DKI Jakarta', score: 2041406 },
+                { province: 'Jawa Barat', score: 1850234 },
+                { province: 'Jawa Timur', score: 1634521 },
+                { province: 'Sumatera Utara', score: 987234 },
+                { province: 'Sulawesi Selatan', score: 756123 },
+                { province: 'Bali', score: 654321 }
+            ];
+            
+            updateProvinceLeaderboard(mockProvinces);
+            
+            const total = mockProvinces.reduce((a, b) => a + b.score, 0) + gameState.score;
+            document.getElementById('global-score').textContent = '×' + total.toLocaleString('id-ID');
+            
+            // Mock winners
+            const mockWinners = [
+                { name: 'imut', wins: 2 },
+                { name: 'araa', wins: 2 },
+                { name: 'rijal', wins: 1 }
+            ];
+            updateTopWinners(mockWinners);
+        }
+
+        function updateProvinceLeaderboard(data) {
+            const container = document.getElementById('province-leaderboard');
+            container.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'glass-card rounded-lg px-3 py-2 min-w-max';
+                const scoreK = (item.score / 1000).toFixed(1);
+                div.innerHTML = `
+                    <div class="unskew">
+                        <p class="font-bold text-xs text-white">${item.province}</p>
+                        <p class="text-[10px] text-blue-300">×${scoreK}Rb</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateTopWinners(winners) {
+            const container = document.getElementById('versus-winners');
+            container.innerHTML = '';
+            
+            winners.slice(0, 3).forEach(winner => {
+                const div = document.createElement('div');
+                div.className = 'glass-card rounded-full px-3 py-1 flex items-center gap-1';
+                div.innerHTML = `
+                    <span class="text-xs">🏅</span>
+                    <span class="text-xs font-bold">${winner.name}</span>
+                    <span class="text-[10px] text-emerald-400">${winner.wins || 2} MENANG</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // ==========================================
+        // RANDOM DONATIONS (Below 50k)
+        // ==========================================
+        function generateRandomDonations() {
+            const names = [
+                'hamba allah', 'lia', 'Rafaana', 'budi santoso', 'ani wijaya',
+                'donasi anonim', 'sumbangan baik', ' supporter1', 'peduli sesama',
+                'dari hati', 'nurul hidayah', 'ahmad fauzi', 'siti aminah'
+            ];
+            
+            const amounts = [10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000];
+            
+            const container = document.getElementById('donation-list');
+            container.innerHTML = '';
+            
+            // Generate 4 random donations
+            for (let i = 0; i < 4; i++) {
+                const name = names[Math.floor(Math.random() * names.length)];
+                const amount = amounts[Math.floor(Math.random() * amounts.length)];
+                
+                const div = document.createElement('div');
+                div.className = 'glass-card rounded-full px-3 py-1 min-w-max border border-yellow-400/20';
+                div.innerHTML = `
+                    <div class="unskew flex items-center gap-1">
+                        <span class="text-[10px] font-bold text-yellow-300">Rp${amount.toLocaleString('id-ID')}</span>
+                        <span class="text-[10px] text-gray-300">${name}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        // ==========================================
+        // CLICK HANDLING
+        // ==========================================
+        function handleMainClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get click coordinates
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX || (rect.left + rect.width / 2);
+            const y = e.clientY || (rect.top + rect.height / 2);
+            
+            // Show hammer
+            showHammer(x, y);
+            
+            // Create score popup
+            showScorePopup(x, y);
+            
+            // Shake target
+            const target = document.getElementById('target-img');
+            target.classList.add('shake-active');
+            setTimeout(() => target.classList.remove('shake-active'), 400);
+            
+            // Update score
+            gameState.score++;
+            localStorage.setItem('score', gameState.score);
+            updateUI();
+            syncToDatabase();
+            
+            // Sound
+            if (gameState.soundEnabled) {
+                playSound();
+            }
+            
+            // Confetti every 10 hits
+            if (gameState.score % 10 === 0) {
+                createConfetti();
+                showToast(`🎉 ${gameState.score} Pukulan!`);
+            }
+        }
+
+        function showHammer(x, y) {
+            const hammer = document.getElementById('hammer');
+            hammer.style.left = (x - 30) + 'px';
+            hammer.style.top = (y - 30) + 'px';
+            hammer.classList.add('active');
+            
+            setTimeout(() => {
+                hammer.classList.remove('active');
+            }, 250);
+        }
+
+        function showScorePopup(x, y) {
+            const popup = document.createElement('div');
+            popup.className = 'score-pop';
+            popup.textContent = '+1';
+            popup.style.left = x + 'px';
+            popup.style.top = y + 'px';
+            document.body.appendChild(popup);
+            
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        function playSound() {
+            // Simple beep using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                // Ignore audio errors
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#fbbf24', '#3b82f6', '#ef4444', '#10b981', '#8b5cf6'];
+            for (let i = 0; i < 15; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                c.style.animationDelay = Math.random() * 0.5 + 's';
+                c.style.animationDuration = (3 + Math.random() * 2) + 's';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 5000);
+            }
+        }
+
+        // ==========================================
+        // UI UPDATES
+        // ==========================================
+        function updateUI() {
+            document.getElementById('user-score').textContent = gameState.score.toLocaleString('id-ID');
+            document.getElementById('current-province').textContent = gameState.province;
+            document.getElementById('current-province').classList.remove('loading-pulse');
+            
+            // Profile modal
+            document.getElementById('profile-name').textContent = gameState.userName;
+            document.getElementById('profile-province').textContent = 'Petarung dari ' + gameState.province;
+            document.getElementById('profile-score').textContent = gameState.score.toLocaleString('id-ID');
+            document.getElementById('profile-province-text').textContent = gameState.province;
+        }
+
+        function updateSoundIcon() {
+            const icon = document.querySelector('#sound-toggle i');
+            icon.className = gameState.soundEnabled ? 'fas fa-volume-up text-green-300' : 'fas fa-volume-mute text-red-300';
+        }
+
+        // ==========================================
+        // MODAL FUNCTIONS
+        // ==========================================
+        function openVersus() {
+            document.getElementById('modal-versus').classList.remove('hidden');
+            gsap.from('#modal-versus > div', { scale: 0.8, opacity: 0, duration: 0.3, ease: "back.out(1.7)" });
+        }
+
+        function openProfile() {
+            document.getElementById('modal-profile').classList.remove('hidden');
+            gsap.from('#modal-profile > div', { scale: 0.8, opacity: 0, duration: 0.3, ease: "back.out(1.7)" });
+        }
+
+        function openCertificate() {
+            // Update cert data
+            document.getElementById('cert-name').textContent = gameState.userName;
+            document.getElementById('cert-province').textContent = gameState.province;
+            document.getElementById('cert-province-total').textContent = gameState.province;
+            document.getElementById('cert-score').textContent = gameState.score.toLocaleString('id-ID');
+            document.getElementById('cert-total').textContent = (2041406 + gameState.score).toLocaleString('id-ID');
+            document.getElementById('cert-date').textContent = new Date().toLocaleDateString('id-ID', { 
+                day: 'numeric', month: 'long', year: 'numeric' 
+            });
+            
+            document.getElementById('modal-certificate').classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            localStorage.setItem('soundEnabled', gameState.soundEnabled);
+            updateSoundIcon();
+            showToast(gameState.soundEnabled ? '🔊 Suara diaktifkan' : '🔇 Suara dimatikan');
+        }
+
+        function showInfo() {
+            alert('🎮 CARA BERMAIN:\n\n1. Tap gambar target untuk memukul\n2. Setiap pukulan = +1 poin\n3. Kumpulkan poin sebanyak-banyaknya\n4. Tantang teman di mode Versus\n5. Dapatkan sertifikat penghargaan!\n\n💡 Tips: Pukul dengan cepat untuk mode versus!');
+        }
+
+        function openSaweria() {
+            window.open('https://saweria.co', '_blank');
+        }
+
+        // ==========================================
+        // VERSUS MODE
+        // ==========================================
+        function findAutoMatch() {
+            closeModal('modal-versus');
+            document.getElementById('modal-match').classList.remove('hidden');
+            
+            // Simulate finding opponent
+            const names = ['Budi', 'Andi', 'Siti', 'Rudi', 'Maya', 'Dedi', 'Lina', 'Rina'];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            
+            setTimeout(() => {
+                document.getElementById('match-opponent-name').textContent = randomName;
+                document.getElementById('match-opponent-avatar').textContent = randomName[0];
+                
+                // Countdown
+                let count = 3;
+                const timer = setInterval(() => {
+                    count--;
+                    document.getElementById('match-countdown').textContent = count;
+                    
+                    if (count <= 0) {
+                        clearInterval(timer);
+                        startBattle(randomName);
+                    }
+                }, 1000);
+            }, 1500);
+        }
+
+        function challengeByName() {
+            const name = prompt('Masukkan nama teman yang ingin ditantang:');
+            if (name && name.trim()) {
+                closeModal('modal-versus');
+                document.getElementById('modal-match').classList.remove('hidden');
+                
+                setTimeout(() => {
+                    document.getElementById('match-opponent-name').textContent = name;
+                    document.getElementById('match-opponent-avatar').textContent = name[0];
+                    
+                    let count = 3;
+                    const timer = setInterval(() => {
+                        count--;
+                        document.getElementById('match-countdown').textContent = count;
+                        if (count <= 0) {
+                            clearInterval(timer);
+                            startBattle(name);
+                        }
+                    }, 1000);
+                }, 1000);
+            }
+        }
+
+        function startBattle(opponentName) {
+            gameState.isVersusMode = true;
+            gameState.battleScore = 0;
+            gameState.opponentScore = 0;
+            gameState.opponentName = opponentName;
+            
+            closeModal('modal-match');
+            document.getElementById('modal-battle').classList.remove('hidden');
+            
+            document.getElementById('battle-opponent-name-display').textContent = opponentName;
+            updateBattleUI();
+            
+            // Start timer
+            let timeLeft = 30;
+            const battleTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('battle-timer').textContent = timeLeft;
+                
+                // AI opponent randomly scores
+                if (Math.random() > 0.7) {
+                    gameState.opponentScore++;
+                    updateBattleUI();
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(battleTimer);
+                    endBattle();
+                }
+            }, 1000);
+        }
+
+        function battleClick(e) {
+            e.preventDefault();
+            gameState.battleScore++;
+            updateBattleUI();
+            
+            // Visual feedback
+            const x = e.clientX;
+            const y = e.clientY;
+            showHammer(x, y);
+            showScorePopup(x, y);
+            
+            if (gameState.soundEnabled) playSound();
+        }
+
+        function updateBattleUI() {
+            document.getElementById('battle-my-score').textContent = gameState.battleScore;
+            document.getElementById('battle-opponent-score').textContent = gameState.opponentScore;
+        }
+
+        function endBattle() {
+            document.getElementById('modal-battle').classList.add('hidden');
+            
+            const won = gameState.battleScore > gameState.opponentScore;
+            const draw = gameState.battleScore === gameState.opponentScore;
+            
+            document.getElementById('modal-result').classList.remove('hidden');
+            document.getElementById('result-icon').textContent = won ? '🏆' : (draw ? '🤝' : '💪');
+            document.getElementById('result-title').textContent = won ? 'MENANG!' : (draw ? 'SERI!' : 'KALAH!');
+            document.getElementById('result-message').textContent = won ? 
+                'Selamat! Kamu mengalahkan lawan!' : 
+                (draw ? 'Pertarungan yang seimbang!' : 'Jangan menyerah, coba lagi!');
+            
+            document.getElementById('result-my-score').textContent = gameState.battleScore;
+            document.getElementById('result-opponent-score').textContent = gameState.opponentScore;
+            
+            // Update wins in database
+            if (won && supabaseClient) {
+                supabaseClient.rpc('increment_wins', { user_id: gameState.userId }).catch(() => {});
+            }
+            
+            // Add to winners display if won
+            if (won) {
+                addWinnerDisplay(gameState.userName);
+            }
+        }
+
+        function addWinnerDisplay(name) {
+            const container = document.getElementById('versus-winners');
+            const div = document.createElement('div');
+            div.className = 'glass-card rounded-full px-3 py-1 flex items-center gap-1 animate-pulse';
+            div.innerHTML = `
+                <span class="text-xs">🏅</span>
+                <span class="text-xs font-bold">${name}</span>
+                <span class="text-[10px] text-emerald-400">1 MENANG</span>
+            `;
+            container.prepend(div);
+            if (container.children.length > 5) container.lastChild.remove();
+        }
+
+        // ==========================================
+        // SHARE & DOWNLOAD
+        // ==========================================
+        function sharePower() {
+            const text = `🔥 Saya telah memukul ${gameState.score.toLocaleString('id-ID')}x di Pukul Bahlil!\n\nMewakili Provinsi ${gameState.province} 💪\n\nAyo tantang saya!`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Pukul Bahlil - Rekor Baru!',
+                    text: text
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('📋 Tersalin ke clipboard!');
+                });
+            }
+        }
+
+        function downloadCert() {
+            showToast('📥 Menyiapkan sertifikat...');
+            
+            // Simulate download
+            setTimeout(() => {
+                // Create a simple text version as demo
+                const certText = `SERTIFIKAT PENGHARGAAN\n\nDiberikan kepada: ${gameState.userName}\nProvinsi: ${gameState.province}\nTelah berkontribusi: ${gameState.score} pukulan\n\nTanggal: ${new Date().toLocaleDateString('id-ID')}`;
+                
+                const blob = new Blob([certText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Sertifikat_${gameState.userName}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showToast('✅ Sertifikat diunduh!');
+            }, 1500);
+        }
+
+        // ==========================================
+        // TOAST NOTIFICATION
+        // ==========================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = message;
+            toast.classList.remove('hidden');
+            
+            gsap.fromTo(toast, 
+                { y: -50, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.3 }
+            );
+            
+            setTimeout(() => {
+                gsap.to(toast, { 
+                    y: -50, 
+                    opacity: 0, 
+                    duration: 0.3, 
+                    onComplete: () => toast.classList.add('hidden') 
+                });
+            }, 2500);
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay') || event.target.classList.contains('fixed')) {
+                if (!event.target.id.includes('battle')) {
+                    event.target.classList.add('hidden');
+                }
+            }
+        }
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
